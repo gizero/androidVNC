@@ -196,6 +196,10 @@ public class VncCanvasActivity extends Activity implements View.OnGenericMotionL
 					dragMode = false;
 				return vncCanvas.processPointerEvent(e, true);
 			} else
+				if ((e.getAction() == MotionEvent.ACTION_UP)
+						&& (vncCanvas.isPointerOnInputElement(e))) {
+					showDialog(R.layout.entertext);
+				}
 				return super.onTouchEvent(e);
 		}
 
