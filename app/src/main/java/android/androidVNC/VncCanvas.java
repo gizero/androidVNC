@@ -1165,6 +1165,37 @@ public class VncCanvas extends ImageView {
 		return false;
 	}
 
+	boolean isKeyColor(int pixel) {
+
+		int redValue = Color.red(pixel);
+		int blueValue = Color.blue(pixel);
+		int greenValue = Color.green(pixel);
+
+		Log.d("GIZERO", "Pixel colors: red=" + redValue + " green=" + greenValue + " blue=" + blueValue);
+
+		// assume keyColor is some kind of bright white
+		return ((redValue > 250) && (blueValue > 250) && (greenValue > 250));
+	}
+
+	boolean isPointerOnInputElement(MotionEvent evt) {
+
+		MotionEvent myEvt = MotionEvent.obtain(evt);
+		changeTouchCoordinatesToFullFrame(myEvt);
+
+		try {
+			int x = (int) myEvt.getX();
+			int y = (int) myEvt.getY();
+
+			int pixel = bitmapData.bitmapPixels[bitmapData.offset(x, y)];
+
+			return isKeyColor(pixel);
+
+		} catch (Exception e) {
+		}
+
+		return false;
+	}
+
 	/**
 	 * Moves the scroll while the volume key is held down
 	 * @author Michael A. MacDonald
