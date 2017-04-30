@@ -198,7 +198,7 @@ public class VncCanvasActivity extends Activity implements View.OnGenericMotionL
 			} else
 				if ((e.getAction() == MotionEvent.ACTION_UP)
 						&& (vncCanvas.isPointerOnInputElement(e))) {
-					showDialog(R.layout.entertext);
+					showDialog(R.layout.entertextsimple);
 				}
 				return super.onTouchEvent(e);
 		}
@@ -706,7 +706,10 @@ public class VncCanvasActivity extends Activity implements View.OnGenericMotionL
 		switch (id) {
 		case R.layout.entertext:
 			return new EnterTextDialog(this);
+		case R.layout.entertextsimple:
+			return new EnterTextSimpleDialog(this);
 		}
+
 		// Default to meta key dialog
 		return new MetaKeyDialog(this);
 	}
