@@ -24,4 +24,5 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':zoomerWithKeys')
+    compile 'org.java-websocket:Java-WebSocket:1.3.4'
 }

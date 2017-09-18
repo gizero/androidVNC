@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.util.zip.Inflater;
 
 import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -53,6 +54,14 @@ import com.antlersoft.android.bc.BCFactory;
 
 import com.sun.jna.examples.unix.X11KeySymDef;
 import com.sun.jna.examples.unix.XF86KeySymDef;
+
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.handshake.ServerHandshake;
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class VncCanvas extends ImageView {
 	private final static String TAG = "VncCanvas";
@@ -88,6 +97,9 @@ public class VncCanvas extends ImageView {
 
 	// VNC protocol connection
 	public RfbProto rfb;
+
+	// SIP protocol connection
+	WebSocketClient cc = null;
 
 	// Internal bitmap data
 	AbstractBitmapData bitmapData;
@@ -172,6 +184,95 @@ public class VncCanvas extends ImageView {
 							pd.setMessage("Downloading first frame.\nPlease wait...");
 						}
 					});
+
+					try {
+						try {
+							cc = new WebSocketClient(new URI("ws://192.168.0.114:1234")) {
+								public boolean editing = false;
+
+								@Override
+								public void onMessage(String message) {
+									Log.v(TAG, "onMessage received" + message);
+
+									JSONObject mc = null;
+									try {
+										mc = new JSONObject(message);
+									} catch (JSONException e) {
+										Log.e(TAG, "JSONException" + e.getMessage());
+									}
+
+									try {
+										String type = mc.getString("type");
+
+										if 	(type.equals("EDITMODE")) {
+											String it = null;
+
+											try {
+												it = mc.getString("text");
+											} catch (JSONException e) {
+												Log.e(TAG, "JSONException" + e.getMessage());
+											}
+
+											if (!editing) {
+												editing = true;
+
+												handler.post(new Runnable() {
+													public void run() {
+														Dialog d = new EnterTextSimpleDialog(getContext());
+														d.show();
+													}
+												});
+											}
+										}
+									} catch (JSONException e) {
+										Log.e(TAG, "JSONException" + e.getMessage());
+									}
+								}
+
+								@Override
+								public void onOpen(ServerHandshake handshake) {
+									Log.v(TAG, "onOpen ws://");
+								}
+
+								@Override
+								public void onClose(int code, String reason, boolean remote) {
+									Log.v(TAG, "onClose ws://");
+								}
+
+								@Override
+								public void onError(Exception ex) {
+									Log.v(TAG, "onError ws://");
+								}
+							};
+							cc.connect();
+						} catch ( URISyntaxException ex ) {
+							Log.v(TAG, "ws:// in not a valid WebSocket URI");
+						}
+
+						Thread t = new Thread() {
+							public void run() {
+								try {
+									while (maintainConnection) {
+										Thread.sleep(2000);
+
+										Log.v(TAG, "Thread alive");
+										if (cc != null && cc.isOpen()) {
+											cc.send("{\"type\": \"EDITMODE\"}");
+										}
+
+									}
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+							}
+						};
+						t.start();
+					} catch (Exception e) {
+						Log.v(TAG, "Closing VNC Connection");
+						rfb.close();
+						throw new Exception("SIP connection failed ");
+					}
+
 					processNormalProtocol(getContext(), pd, setModes);
 				} catch (Throwable e) {
 					if (maintainConnection) {
@@ -190,7 +291,9 @@ public class VncCanvas extends ImageView {
 							String error = "VNC connection failed!";
 							if (e.getMessage() != null && (e.getMessage().indexOf("authentication") > -1)) {
 								error = "VNC authentication failed!";
- 							}
+							} else if (e.getMessage() != null && (e.getMessage().indexOf("SIP") > -1)) {
+								error = "SIP connection failed!";
+							}
 							final String error_ = error + "<br>" + e.getLocalizedMessage();
 							handler.post(new Runnable() {
 								public void run() {
@@ -199,6 +302,7 @@ public class VncCanvas extends ImageView {
 							});
 						}
 					}
+					if (rfb != null) rfb.close();
 				}
 			}
 		};
