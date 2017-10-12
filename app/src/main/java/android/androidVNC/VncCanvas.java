@@ -266,7 +266,7 @@ public class VncCanvas extends ImageView {
 								}
 							}
 						};
-						t.start();
+						//t.start();
 					} catch (Exception e) {
 						Log.v(TAG, "Closing VNC Connection");
 						rfb.close();
