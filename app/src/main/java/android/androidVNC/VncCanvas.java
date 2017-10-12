@@ -192,7 +192,7 @@ public class VncCanvas extends ImageView {
 
 								@Override
 								public void onMessage(String message) {
-									Log.v(TAG, "onMessage received" + message);
+									Log.v(TAG, "onMessage received " + message);
 
 									JSONObject mc = null;
 									try {
@@ -210,7 +210,7 @@ public class VncCanvas extends ImageView {
 											try {
 												it = mc.getString("text");
 											} catch (JSONException e) {
-												Log.e(TAG, "JSONException" + e.getMessage());
+												Log.e(TAG, "JSONException " + e.getMessage());
 											}
 
 											if (!editing) {
