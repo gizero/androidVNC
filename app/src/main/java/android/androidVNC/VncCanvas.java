@@ -187,7 +187,7 @@ public class VncCanvas extends ImageView {
 
 					try {
 						try {
-							cc = new WebSocketClient(new URI("ws://192.168.0.114:1234")) {
+							cc = new WebSocketClient(new URI("ws://192.168.0.131:12345")) {
 								public boolean editing = false;
 
 								@Override
