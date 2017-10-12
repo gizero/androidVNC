@@ -250,24 +250,6 @@ public class VncCanvas extends ImageView {
 							Log.v(TAG, "ws:// in not a valid WebSocket URI");
 						}
 
-						Thread t = new Thread() {
-							public void run() {
-								try {
-									while (maintainConnection) {
-										Thread.sleep(2000);
-
-										Log.v(TAG, "Thread alive");
-										if (cc != null && cc.isOpen()) {
-											cc.send("{\"type\": \"EDITMODE\"}");
-										}
-
-									}
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
-							}
-						};
-						//t.start();
 					} catch (Exception e) {
 						Log.v(TAG, "Closing VNC Connection");
 						rfb.close();
