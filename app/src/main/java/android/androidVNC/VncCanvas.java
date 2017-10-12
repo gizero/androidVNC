@@ -237,6 +237,7 @@ public class VncCanvas extends ImageView {
 								@Override
 								public void onClose(int code, String reason, boolean remote) {
 									Log.v(TAG, "onClose ws://");
+									throw new RuntimeException("SIP connection terminated");
 								}
 
 								@Override
