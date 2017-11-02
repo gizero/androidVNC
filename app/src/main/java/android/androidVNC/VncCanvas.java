@@ -219,6 +219,7 @@ public class VncCanvas extends ImageView {
 						}
 					}
 					if (rfb != null) rfb.close();
+					// TODO: we must close sip here
 				}
 			}
 		};
@@ -476,6 +477,7 @@ public class VncCanvas extends ImageView {
 		} finally {
 			Log.v(TAG, "Closing VNC Connection");
 			rfb.close();
+			// TODO: we must close sip here
 		}
 	}
 	
