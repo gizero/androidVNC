@@ -14,19 +14,28 @@ import java.io.IOException;
 class EnterTextSimpleDialog extends Dialog {
     private EditText _textEnterText;
     private String text = null;
+    private EnterTextSimpleDialogListener mEnterTextSimpleDialogListener;
 
     private VncCanvasActivity _canvasActivity;
 
-    EnterTextSimpleDialog(Context context, String initial_text){
+    EnterTextSimpleDialog(Context context, String initial_text, EnterTextSimpleDialogListener enterTextSimpleDialogListener){
         super(context);
         setOwnerActivity((Activity)context);
         _canvasActivity = (VncCanvasActivity)context;
         text = initial_text;
+        mEnterTextSimpleDialogListener = enterTextSimpleDialogListener;
     }
 
-    // should be factored out with same method from EnterTextDialog
+    EnterTextSimpleDialog(Context context, String initial_text) {
+        this(context, initial_text, null);
+    }
+
     private void sendText(String s)
     {
+        if (mEnterTextSimpleDialogListener != null) {
+            mEnterTextSimpleDialogListener.onSendText(s);
+        }
+
         RfbProto rfb = _canvasActivity.vncCanvas.rfb;
         int l = s.length();
         for (int i = 0; i<l; i++)
@@ -74,6 +83,9 @@ class EnterTextSimpleDialog extends Dialog {
                 sendText(_textEnterText.getText().toString());
                 _textEnterText.setText("");
                 dismiss();
+                if (mEnterTextSimpleDialogListener != null) {
+                    mEnterTextSimpleDialogListener.onDismiss();
+                }
             }
         });
     }
