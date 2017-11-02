@@ -89,4 +89,9 @@ class EnterTextSimpleDialog extends Dialog {
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
+    public interface EnterTextSimpleDialogListener {
+        void onSendText(String text);
+        void onDismiss();
+    }
+
 }
