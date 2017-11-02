@@ -218,7 +218,7 @@ public class VncCanvas extends ImageView {
 
 												handler.post(new Runnable() {
 													public void run() {
-														Dialog d = new EnterTextSimpleDialog(getContext());
+														Dialog d = new EnterTextSimpleDialog(getContext(), null);
 														d.show();
 													}
 												});

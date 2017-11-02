@@ -707,7 +707,7 @@ public class VncCanvasActivity extends Activity implements View.OnGenericMotionL
 		case R.layout.entertext:
 			return new EnterTextDialog(this);
 		case R.layout.entertextsimple:
-			return new EnterTextSimpleDialog(this);
+			return new EnterTextSimpleDialog(this, null);
 		}
 
 		// Default to meta key dialog

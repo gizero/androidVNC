@@ -13,13 +13,15 @@ import java.io.IOException;
 
 class EnterTextSimpleDialog extends Dialog {
     private EditText _textEnterText;
+    private String text = null;
 
     private VncCanvasActivity _canvasActivity;
 
-    EnterTextSimpleDialog(Context context){
+    EnterTextSimpleDialog(Context context, String initial_text){
         super(context);
         setOwnerActivity((Activity)context);
         _canvasActivity = (VncCanvasActivity)context;
+        text = initial_text;
     }
 
     // should be factored out with same method from EnterTextDialog
@@ -60,6 +62,7 @@ class EnterTextSimpleDialog extends Dialog {
         setContentView(R.layout.entertextsimple);
         setTitle(R.string.enter_text_title);
         _textEnterText = (EditText)findViewById(R.id.textEnterText);
+        _textEnterText.setText(text);
 
         (findViewById(R.id.buttonSendText)).setOnClickListener(new View.OnClickListener() {
 
