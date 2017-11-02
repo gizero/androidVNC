@@ -32,8 +32,8 @@ package android.androidVNC;
 import java.io.IOException;
 import java.util.zip.Inflater;
 
+import android.androidVNC.sip.SipClient;
 import android.app.ProgressDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -55,13 +55,7 @@ import com.antlersoft.android.bc.BCFactory;
 import com.sun.jna.examples.unix.X11KeySymDef;
 import com.sun.jna.examples.unix.XF86KeySymDef;
 
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.handshake.ServerHandshake;
 import java.net.URI;
-import java.net.URISyntaxException;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class VncCanvas extends ImageView {
 	private final static String TAG = "VncCanvas";
@@ -98,9 +92,6 @@ public class VncCanvas extends ImageView {
 	// VNC protocol connection
 	public RfbProto rfb;
 
-	// SIP protocol connection
-	WebSocketClient cc = null;
-
 	// Internal bitmap data
 	AbstractBitmapData bitmapData;
 	public Handler handler = new Handler();
@@ -132,7 +123,10 @@ public class VncCanvas extends ImageView {
 	private MouseScrollRunnable scrollRunnable;
 	
 	private Paint handleRREPaint;
-	
+
+	// SIP protocol connection
+	SipClient sp;
+
 	/**
 	 * Position of the top left portion of the <i>visible</i> part of the screen, in
 	 * full-frame coordinates
@@ -186,72 +180,11 @@ public class VncCanvas extends ImageView {
 					});
 
 					try {
-						try {
-							cc = new WebSocketClient(new URI("ws://192.168.0.131:12345")) {
-								public boolean editing = false;
-
-								@Override
-								public void onMessage(String message) {
-									Log.v(TAG, "onMessage received " + message);
-
-									JSONObject mc = null;
-									try {
-										mc = new JSONObject(message);
-									} catch (JSONException e) {
-										Log.e(TAG, "JSONException" + e.getMessage());
-									}
-
-									try {
-										String type = mc.getString("type");
-
-										if 	(type.equals("EDITMODE")) {
-											String it = null;
-
-											try {
-												it = mc.getString("text");
-											} catch (JSONException e) {
-												Log.e(TAG, "JSONException " + e.getMessage());
-											}
-
-											if (!editing) {
-												editing = true;
-
-												handler.post(new Runnable() {
-													public void run() {
-														Dialog d = new EnterTextSimpleDialog(getContext(), null);
-														d.show();
-													}
-												});
-											}
-										}
-									} catch (JSONException e) {
-										Log.e(TAG, "JSONException" + e.getMessage());
-									}
-								}
-
-								@Override
-								public void onOpen(ServerHandshake handshake) {
-									Log.v(TAG, "onOpen ws://");
-								}
-
-								@Override
-								public void onClose(int code, String reason, boolean remote) {
-									Log.v(TAG, "onClose ws://");
-									throw new RuntimeException("SIP connection terminated");
-								}
-
-								@Override
-								public void onError(Exception ex) {
-									Log.v(TAG, "onError ws://");
-								}
-							};
-							cc.connect();
-						} catch ( URISyntaxException ex ) {
-							Log.v(TAG, "ws:// in not a valid WebSocket URI");
-						}
-
+						sp = new SipClient(getContext(), handler);
+						sp.init("ws://192.168.0.101:12345");
 					} catch (Exception e) {
 						Log.v(TAG, "Closing VNC Connection");
+						Log.e(TAG, "SIP exception", e);
 						rfb.close();
 						throw new Exception("SIP connection failed ");
 					}
