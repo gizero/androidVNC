@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -72,6 +74,25 @@ public class EnterTextSimpleDialog extends Dialog {
         setTitle(R.string.enter_text_title);
         _textEnterText = (EditText)findViewById(R.id.textEnterText);
         _textEnterText.setText(text);
+
+        _textEnterText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (mEnterTextSimpleDialogListener != null) {
+                    mEnterTextSimpleDialogListener.onSendText(s.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         (findViewById(R.id.buttonSendText)).setOnClickListener(new View.OnClickListener() {
 
