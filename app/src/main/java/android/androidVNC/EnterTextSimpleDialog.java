@@ -11,14 +11,14 @@ import android.widget.EditText;
 
 import java.io.IOException;
 
-class EnterTextSimpleDialog extends Dialog {
+public class EnterTextSimpleDialog extends Dialog {
     private EditText _textEnterText;
     private String text = null;
     private EnterTextSimpleDialogListener mEnterTextSimpleDialogListener;
 
     private VncCanvasActivity _canvasActivity;
 
-    EnterTextSimpleDialog(Context context, String initial_text, EnterTextSimpleDialogListener enterTextSimpleDialogListener){
+    public EnterTextSimpleDialog(Context context, String initial_text, EnterTextSimpleDialogListener enterTextSimpleDialogListener){
         super(context);
         setOwnerActivity((Activity)context);
         _canvasActivity = (VncCanvasActivity)context;
