@@ -38,6 +38,7 @@ import android.database.Cursor;
 import android.graphics.PointF;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -539,6 +540,10 @@ public class VncCanvasActivity extends Activity implements View.OnGenericMotionL
 	public void onCreate(Bundle icicle) {
 
 		super.onCreate(icicle);
+
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
