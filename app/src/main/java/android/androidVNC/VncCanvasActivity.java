@@ -197,10 +197,6 @@ public class VncCanvasActivity extends Activity implements View.OnGenericMotionL
 					dragMode = false;
 				return vncCanvas.processPointerEvent(e, true);
 			} else
-				if ((e.getAction() == MotionEvent.ACTION_UP)
-						&& (vncCanvas.isPointerOnInputElement(e))) {
-					showDialog(R.layout.entertextsimple);
-				}
 				return super.onTouchEvent(e);
 		}
 
@@ -711,8 +707,6 @@ public class VncCanvasActivity extends Activity implements View.OnGenericMotionL
 		switch (id) {
 		case R.layout.entertext:
 			return new EnterTextDialog(this);
-		case R.layout.entertextsimple:
-			return new EnterTextSimpleDialog(this, null);
 		}
 
 		// Default to meta key dialog
