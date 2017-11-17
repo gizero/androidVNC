@@ -468,9 +468,10 @@ public class VncCanvas extends ImageView {
 		} catch (Exception e) {
 			throw e;
 		} finally {
+			Log.v(TAG, "Closing SIP Connection");
+			sp.close();
 			Log.v(TAG, "Closing VNC Connection");
 			rfb.close();
-			// TODO: we must close sip here
 		}
 	}
 	
