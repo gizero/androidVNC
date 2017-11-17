@@ -100,6 +100,6 @@ public class SipWebsocketClient extends SocketClient {
 
     @Override
     public void send(String s) {
-
+        cc.send(s);
     }
 }
