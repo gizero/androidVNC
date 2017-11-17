@@ -72,6 +72,10 @@ public class SipClient implements SocketListener {
         }
     }
 
+    public void close() {
+        if (sc != null) sc.close();
+    }
+
     public void setEditing(boolean value) {
         editing = value;
     }
