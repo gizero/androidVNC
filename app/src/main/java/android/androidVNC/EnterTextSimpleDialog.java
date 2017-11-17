@@ -37,31 +37,6 @@ public class EnterTextSimpleDialog extends Dialog {
         if (mEnterTextSimpleDialogListener != null) {
             mEnterTextSimpleDialogListener.onSendText(s);
         }
-
-        RfbProto rfb = _canvasActivity.vncCanvas.rfb;
-        int l = s.length();
-        for (int i = 0; i<l; i++)
-        {
-            char c = s.charAt(i);
-            int meta = 0;
-            int keysym = c;
-            if (Character.isISOControl(c))
-            {
-                if (c=='\n')
-                    keysym = MetaKeyBean.keysByKeyCode.get(KeyEvent.KEYCODE_ENTER).keySym;
-                else
-                    continue;
-            }
-            try
-            {
-                rfb.writeKeyEvent(keysym, meta, true);
-                rfb.writeKeyEvent(keysym, meta, false);
-            }
-            catch (IOException ioe)
-            {
-                // TODO: log this
-            }
-        }
     }
 
     /* (non-Javadoc)
