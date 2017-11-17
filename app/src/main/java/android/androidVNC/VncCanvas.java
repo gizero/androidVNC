@@ -211,8 +211,8 @@ public class VncCanvas extends ImageView {
 							});
 						}
 					}
+					if (sp != null) sp.close();
 					if (rfb != null) rfb.close();
-					// TODO: we must close sip here
 				}
 			}
 		};
