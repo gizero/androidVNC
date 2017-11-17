@@ -95,7 +95,7 @@ public class SipWebsocketClient extends SocketClient {
 
     @Override
     public void close() {
-
+        if (cc != null) cc.close();
     }
 
     @Override
