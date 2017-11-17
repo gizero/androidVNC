@@ -178,15 +178,9 @@ public class VncCanvas extends ImageView {
 						}
 					});
 
-					try {
-						sp = new SipClient(getContext(), handler);
-						sp.init("ws://gizero.net:12345");
-					} catch (Exception e) {
-						Log.v(TAG, "Closing VNC Connection");
-						Log.e(TAG, "SIP exception", e);
-						rfb.close();
-						throw new Exception("SIP connection failed ");
-					}
+					sp = new SipClient(getContext(), handler);
+					sp.init("ws://gizero.net:12345");
+//					sp.init("ws://192.168.0.111:12345");
 
 					processNormalProtocol(getContext(), pd, setModes);
 				} catch (Throwable e) {
