@@ -100,6 +100,7 @@ public class SipClient implements SocketListener {
                 @Override
                 public void onSendText(String text) {
                     Log.d(TAG, "sending...." + text);
+                    sc.send(text);
                 }
 
                 @Override
