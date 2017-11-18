@@ -133,6 +133,7 @@ public class VncCanvas extends ImageView {
 	 */
 	int absoluteXPosition = 0, absoluteYPosition = 0;
 
+	private Context mContext;
 	/**
 	 * Constructor used by the inflation apparatus
 	 * @param context
@@ -140,6 +141,7 @@ public class VncCanvas extends ImageView {
 	public VncCanvas(final Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
+		mContext = context;
 		scrollRunnable = new MouseScrollRunnable();
 		handleRREPaint = new Paint();
 		handleRREPaint.setStyle(Style.FILL);
@@ -178,7 +180,7 @@ public class VncCanvas extends ImageView {
 						}
 					});
 
-					sp = new SipClient(getContext(), handler);
+					sp = new SipClient(mContext, handler);
 					sp.init("ws://gizero.net:12345");
 //					sp.init("ws://192.168.0.111:12345");
 
